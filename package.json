@@ -1,0 +1,70 @@
+{
+  "name": "sse-presentation",
+  "description": "",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=16.x"
+  },
+  "scripts": {
+    "clean": "node -e \"fs.promises.rm('./src/public/', { recursive: true }).catch(() => {})\"",
+    "format": "prettier-standard",
+    "lint": "prettier-standard --check --lint && tsc",
+    "prebuild": "npm run clean",
+    "build": "parcel build",
+    "start": "node src/bin/server.js",
+    "client:dev": "parcel serve",
+    "start:dev": "nodemon --inspect=0.0.0.0:9229 --watch ./src/ --ignore ./src/client/ --ignore ./src/public/  src/bin/server.js",
+    "dev": "concurrently 'npm:start:dev' 'npm:client:dev' --names server,client --prefix-colors magenta,cyan",
+    "migrate:create": "node src/bin/migrate-create.js",
+    "migrate:up": "node src/bin/server.js migrate:up",
+    "migrate:down": "node src/bin/server.js migrate:down",
+    "present": "slides slides.md",
+    "docker:up": "docker-compose up",
+    "docker:up:arm": "docker-compose --file docker-compose.yaml --file docker-compose.arm.yaml up",
+    "docker:down": "docker-compose down --remove-orphans --volumes"
+  },
+  "dependencies": {
+    "commander": "^8.1.0",
+    "cookie": "^0.4.1",
+    "cookie-signature": "^1.1.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "migrate-mongo": "^8.2.3",
+    "mongodb": "^4.1.0",
+    "zod": "^3.7.2"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.4.1",
+    "@types/cookie-signature": "^1.0.3",
+    "@types/express": "^4.17.13",
+    "@types/migrate-mongo": "^8.1.2",
+    "@types/node": "^16.6.1",
+    "@types/react": "^17.0.18",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.1.8",
+    "@types/styled-components": "^5.1.12",
+    "concurrently": "^6.2.1",
+    "nodemon": "^2.0.12",
+    "parcel": "^2.0.0-rc.0",
+    "prettier-standard": "^16.4.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "reakit": "^1.3.8",
+    "reakit-system-bootstrap": "^0.14.1",
+    "standard": "^16.0.3",
+    "styled-components": "^5.3.0",
+    "typescript": "^4.3.5"
+  },
+  "targets": {
+    "app": {
+      "publicUrl": "/",
+      "distDir": "./src/public",
+      "source": "./src/client/index.html",
+      "context": "browser"
+    }
+  }
+}
